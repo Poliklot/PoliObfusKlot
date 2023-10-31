@@ -1,0 +1,15 @@
+{
+    "html": {
+      "directories": ["path/to/html/files"],
+      "exclude": ["exclude1.html", "exclude2.html"]
+    },
+    "css": {
+      "directories": ["path/to/css/files"],
+      "exclude": ["exclude1.css", "exclude2.css"]
+    },
+    "js": {
+      "directories": ["path/to/js/files"],
+      "exclude": ["exclude1.js", "exclude2.js"]
+    }
+}
+  
