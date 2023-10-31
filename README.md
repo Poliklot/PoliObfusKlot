@@ -14,7 +14,7 @@
 ## Установка
 
 ```bash
-npm install PoliObfusKlot
+npm i poliobfusklot
 ```
 
 ## Использование
