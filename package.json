@@ -8,7 +8,10 @@
   "author": "Poliklot",
   "license": "MIT",
   "scripts": {
-    "obfuscate": "node obfuscateCSS.js && node updateHTML.js && node updateJS.js"
+    "obfuscate": "node index.js"
+  },
+  "bin": {
+    "poliobfusklot": "./index.js"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
