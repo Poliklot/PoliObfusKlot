@@ -9,5 +9,12 @@
   "license": "MIT",
   "scripts": {
     "obfuscate": "node obfuscateCSS.js && node updateHTML.js && node updateJS.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "crypto": "^1.0.1",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "postcss": "^8.4.31"
   }
 }
