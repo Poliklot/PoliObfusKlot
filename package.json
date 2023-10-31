@@ -1,0 +1,13 @@
+{
+  "name": "poliobfusklot",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Poliklot/PoliObfusKlot.git"
+  },
+  "author": "Poliklot",
+  "license": "MIT",
+  "scripts": {
+    "obfuscate": "node obfuscateCSS.js && node updateHTML.js && node updateJS.js"
+  }
+}
