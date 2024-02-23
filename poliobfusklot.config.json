@@ -1,0 +1,12 @@
+{
+    "html": {
+      "directories": ["./tests/project_1"],
+      "exclude": ["template.html"]
+    },
+    "css": {
+      "directories": ["./tests/project_1/styles"]
+    },
+    "js": {
+      "directories": ["./tests/project_1/script"]
+    }
+}
