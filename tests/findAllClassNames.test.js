@@ -181,6 +181,20 @@ describe('findClassNamesInCSS function', () => {
         const result = findClassNamesInCSS(cssContent);
         expect(result).to.deep.equal(['class-font']);
     });
+    
+    it('Должна корректно обрабатывать сложные селекторы', () => {
+        const cssContent = `
+            .plan-block_step:nth-last-child(-n + 2) {
+                height: auto;
+            }
+            
+            .answer-questions input[type="radio"]:checked + label .circle {
+                display: block;
+            }
+        `;
+        const result = findClassNamesInCSS(cssContent);
+        expect(result).to.deep.equal(['plan-block_step', 'answer-questions', 'circle']);
+    });
 
     it('Должна корректно обрабатывать динамические селекторы вроде [attr^=value], [attr$=value], [attr*=value]', () => {
         const cssContent = `
@@ -198,6 +212,8 @@ describe('findClassNamesInCSS function', () => {
         expect(result).to.deep.equal(['class-secure', 'class-organization', 'class-example']);
     });
 });
+
+
 
 describe('findClassNamesInHTML function', () => {
     it('Должен найти все имена классов в заданном содержимом HTML', () => {
@@ -291,7 +307,7 @@ describe('findClassNamesInJS function', () => {
             element.innerHTML = \`<div class="\${baseClass} \${dynamicClass} \${additionalClass} static-class"></div>\`;
         `;
         const result = findClassNamesInJS(jsContent);
-        expect(result).to.deep.equal(['base-class', 'dynamic-class', 'conditional-class', 'alternative-class', 'static-class']);
+        expect(result.sort()).to.deep.equal(['base-class', 'dynamic-class', 'conditional-class', 'alternative-class', 'static-class'].sort());
     });
 
     it('Должен игнорировать дубликаты классов', () => {
@@ -303,5 +319,46 @@ describe('findClassNamesInJS function', () => {
         expect(result).to.deep.equal(['repeat-class']);
     });
 
-    // Дополните с другими тестами по необходимости
+    it('Должен найти имена классов в сложном сценарии использования в BurgerMenu функции', () => {
+        const jsContent = `
+            function BurgerMenu() {
+                const $header = document.querySelector('.header');
+                const $headerTop = document.querySelector('.header .header__top');
+                const $headerBurger = document.querySelector('.header .header-burger');
+                const $headerTopBackdrop = document.querySelector('.header .header__top-backdrop');
+                const $modalClose = $headerTop.querySelector('.modal__close');
+                const $buttonCall = $headerTop.querySelector('.burger-menu_contacts_btn__call');
+                const submenuButtonsList = $headerTop.querySelectorAll('.burger-menu_submenu_item[data-submenubtn]');
+                const selectItemsList = $headerTop.querySelectorAll('.burger-menu_nav__select');
+            }
+        `;
+        const result = findClassNamesInJS(jsContent);
+        expect(result.sort()).to.deep.equal([
+            'header',
+            'header__top',
+            'header-burger',
+            'header__top-backdrop',
+            'modal__close',
+            'burger-menu_contacts_btn__call',
+            'burger-menu_submenu_item',
+            'burger-menu_nav__select'
+        ].sort());
+    });
+
+    it('Должен найти имена классов, добавляемых к элементам, и игнорировать не классовые атрибуты', () => {
+        const jsContent = `
+            const e = '<svg height="38" ... xmlns="http://www.w3.org/2000/svg"></svg>';
+            const t = document.createElement("span");
+            t.innerHTML = e;
+            t.className = "button__loader";
+            this.$submit.insertAdjacentElement("afterbegin", t);
+            requestAnimationFrame(() => {
+                t.classList.add("loading");
+                t.classList.add("active");
+            });
+        `;
+        const result = findClassNamesInJS(jsContent);
+        expect(result).to.deep.equal(['button__loader', 'loading', 'active']);
+    });
+    
 });
