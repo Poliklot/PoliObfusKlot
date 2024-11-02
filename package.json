@@ -1,6 +1,6 @@
 {
   "name": "poliobfusklot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Инструмент для обфускации CSS-классов в проектах.",
   "repository": {
     "type": "git",

@@ -1,2 +1,10 @@
+# Исключить node_modules
 node_modules/
-dist/
+
+# Исключить временные файлы
+*.log
+*.tmp
+
+# Исключить конкретные файлы или директории
+tests/project_1/
+classMappings.json
