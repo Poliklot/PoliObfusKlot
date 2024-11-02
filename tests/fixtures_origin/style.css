@@ -1,0 +1,6 @@
+.test-class {
+    color: red;
+}
+.another-class, .test-class {
+    background: blue;
+}

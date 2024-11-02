@@ -1,6 +1,7 @@
 {
   "name": "poliobfusklot",
-  "version": "0.0.7",
+  "version": "1.0.0",
+  "description": "Инструмент для обфускации CSS-классов в проектах.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Poliklot/PoliObfusKlot.git"
@@ -13,19 +14,21 @@
   },
   "scripts": {
     "start": "node cli.js",
-    "test": "mocha ./tests/**/*.test.js"
+    "test": "mocha ./tests/**/*.test.js",
+    "obfuscate:test_project": "node cli.js --config tests/project_1/poliobfusklot.config.json"
   },
   "dependencies": {
     "@babel/core": "^7.23.9",
+    "@babel/generator": "^7.23.9",
     "@babel/parser": "^7.23.9",
     "@babel/traverse": "^7.23.9",
     "cheerio": "^1.0.0-rc.12",
-    "crypto": "^1.0.1",
-    "fs": "^0.0.1-security",
-    "path": "^0.12.7",
-    "postcss": "^8.4.31"
+    "css-what": "^6.1.0",
+    "postcss": "^8.4.31",
+    "prettier": "^3.3.2"
   },
   "devDependencies": {
+    "@types/node": "^22.8.6",
     "chai": "^4.3.10",
     "mocha": "^10.2.0"
   }

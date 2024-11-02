@@ -1,12 +1,17 @@
 {
-    "html": {
-      "directories": ["./tests/project_1"],
-      "exclude": ["template.html"]
-    },
-    "css": {
-      "directories": ["./tests/project_1/styles"]
-    },
-    "js": {
-      "directories": ["./tests/project_1/script"]
-    }
+  "css": {
+    "directories": ["tests/project_1"],
+    "extensions": [".css"],
+    "exclude": []
+  },
+  "html": {
+    "directories": ["tests/project_1"],
+    "extensions": [".html"],
+    "exclude": []
+  },
+  "js": {
+    "directories": ["tests/project_1"],
+    "extensions": [".js"],
+    "exclude": []
+  }
 }

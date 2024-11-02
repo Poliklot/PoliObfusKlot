@@ -1,0 +1,18 @@
+{
+    "css": {
+      "directories": ["tests/project_1"],
+      "extensions": [".css"],
+      "exclude": []
+    },
+    "html": {
+      "directories": ["tests/project_1"],
+      "extensions": [".html"],
+      "exclude": []
+    },
+    "js": {
+      "directories": ["tests/project_1"],
+      "extensions": [".js"],
+      "exclude": []
+    }
+  }
+  
