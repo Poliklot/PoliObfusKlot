@@ -18,17 +18,16 @@
     "obfuscate:test_project": "node cli.js --config tests/project_1/poliobfusklot.config.json"
   },
   "dependencies": {
-    "@babel/core": "^7.23.9",
-    "@babel/generator": "^7.23.9",
-    "@babel/parser": "^7.23.9",
-    "@babel/traverse": "^7.23.9",
-    "cheerio": "^1.0.0-rc.12",
+    "@babel/generator": "^7.29.8",
+    "@babel/parser": "^7.29.8",
+    "@babel/traverse": "^7.29.8",
+    "cheerio": "^1.2.0",
     "css-what": "^6.1.0",
-    "postcss": "^8.4.31",
-    "prettier": "^3.3.2"
+    "postcss": "^8.5.25",
+    "prettier": "^3.9.6"
   },
   "devDependencies": {
-    "@types/node": "^22.8.6",
+    "@types/node": "^22.20.1",
     "chai": "^4.3.10",
     "mocha": "11.3.0"
   },
