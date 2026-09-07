@@ -23,11 +23,11 @@
     "@babel/traverse": "^7.29.8",
     "cheerio": "^1.2.0",
     "css-what": "^6.1.0",
-    "postcss": "^8.5.25",
+    "postcss": "^8.5.28",
     "prettier": "^3.9.6"
   },
   "devDependencies": {
-    "@types/node": "^26.2.0",
+    "@types/node": "^26.5.0",
     "chai": "^4.3.10",
     "mocha": "11.3.0"
   },
