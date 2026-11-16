@@ -32,7 +32,9 @@
     "mocha": "11.3.0"
   },
   "overrides": {
-    "serialize-javascript": "7.0.7",
-    "minimatch": "10.2.6"
+    "serialize-javascript": "7.1.4",
+    "mocha": {
+      "glob": "14.0.2"
+    }
   }
 }
