@@ -3,29 +3,21 @@
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const obfuscateCSS = require('../lib/obfuscateCSS');
 const { updateHTML } = require('../lib/updateHTML');
 const updateJS = require('../lib/updateJS');
 
 describe('Обфускация классов и обновление файлов', () => {
-    const testDir = path.join(__dirname, 'fixtures');
-    const mappingsFilePath = path.join(process.cwd(), './classMappings.json');
-    const originalFiles = {};
+    const originalCwd = process.cwd();
+    let testRoot;
+    let testDir;
 
     before(() => {
-        // Сохраняем оригинальное содержимое файлов
-        const filesToBackup = [
-            path.join(testDir, 'style.css'),
-            path.join(testDir, 'nested', 'style2.css'),
-            path.join(testDir, 'index.html'),
-            path.join(testDir, 'nested', 'page.html'),
-            path.join(testDir, 'script.js'),
-            path.join(testDir, 'nested', 'script2.js'),
-        ];
-
-        filesToBackup.forEach(file => {
-            originalFiles[file] = fs.readFileSync(file, 'utf-8');
-        });
+        testRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'polio-test-'));
+        testDir = path.join(testRoot, 'fixtures');
+        fs.cpSync(path.join(__dirname, 'fixtures'), testDir, { recursive: true });
+        process.chdir(testRoot);
 
         // Создаем маппинг классов
         const mappings = {
@@ -33,17 +25,12 @@ describe('Обфускация классов и обновление файло
             'another-class': 'b',
             'responsive-class': 'c',
         };
-        fs.writeFileSync(mappingsFilePath, JSON.stringify(mappings, null, 2));
+        fs.writeFileSync('classMappings.json', JSON.stringify(mappings, null, 2));
     });
 
     after(() => {
-        // Восстанавливаем оригинальные файлы
-        // Object.keys(originalFiles).forEach(file => {
-        //     fs.writeFileSync(file, originalFiles[file]);
-        // });
-
-        // Удаляем маппинг после тестов
-        fs.unlinkSync(mappingsFilePath);
+        process.chdir(originalCwd);
+        if (testRoot) fs.rmSync(testRoot, { recursive: true, force: true });
     });
 
     it('Должен корректно обфусцировать CSS-файлы', async () => {

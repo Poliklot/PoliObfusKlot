@@ -336,7 +336,7 @@ describe('findClassNamesInJS function', () => {
     });
     
     it('Должен извлекать имена классов из минифицированного кода с короткими именами переменных', () => {
-        const jsContent = `a.b('short-class');c.d='another-short-class';`;
+        const jsContent = `a.classList.add('short-class');c.className='another-short-class';`;
         const result = findClassNamesInJS(jsContent);
         expect(result).to.deep.equal(['short-class', 'another-short-class']);
     });
@@ -348,7 +348,8 @@ describe('findClassNamesInJS function', () => {
     });
     
     it('Должен обрабатывать имена классов в минифицированном коде без точек с запятой', () => {
-        const jsContent = `element.classList.add('no-semicolon-class')element.className='another-class'`;
+        const jsContent = `element.classList.add('no-semicolon-class')
+element.className='another-class'`;
         const result = findClassNamesInJS(jsContent);
         expect(result).to.deep.equal(['no-semicolon-class', 'another-class']);
     });
@@ -425,10 +426,54 @@ describe('findClassNamesInJS function', () => {
         expect(result).to.deep.equal(['class-one', 'class-two', 'class-three']);
     });
     
-    it('Должен игнорировать имена классов, заданные через переменные, в минифицированном коде', () => {
+    it('Должен извлекать статически известное значение короткой переменной независимо от форматирования', () => {
         const jsContent = `var c='dynamic-class';e.classList.add(c);`;
         const result = findClassNamesInJS(jsContent);
-        expect(result).to.deep.equal([]);
+        expect(result).to.deep.equal(['dynamic-class']);
+    });
+
+    it('Should not classify arbitrary short methods or properties as DOM classes', () => {
+        expect(findClassNamesInJS(`a.b('not-a-class');c.d='not-a-class-either';`)).to.deep.equal([]);
+    });
+
+    it('Should keep shadowed bindings in their own scope', () => {
+        const source = `const name='outer';{const name='inner';el.classList.add(name)}el.classList.add(name)`;
+        expect(findClassNamesInJS(source)).to.deep.equal(['inner', 'outer']);
+    });
+
+    it('Should ignore mutable or statically unknown variables', () => {
+        expect(findClassNamesInJS(`let c='old';c=readClass();el.classList.add(c)`)).to.deep.equal([]);
+        expect(findClassNamesInJS(`var c=readClass();el.classList.add(c)`)).to.deep.equal([]);
+    });
+
+    it('Should not invent partial class names from dynamic templates', () => {
+        expect(findClassNamesInJS('const prefix="known-";el.classList.add(`${prefix}${unknown}`)')).to.deep.equal([]);
+        expect(findClassNamesInJS('const html=`<div class="prefix-${unknown} fixed"></div>`')).to.deep.equal(['fixed']);
+    });
+
+    it('Should stop cyclic binding resolution and excessive template alternatives', () => {
+        expect(findClassNamesInJS(`const a=b;const b=a;el.classList.add(a)`)).to.deep.equal([]);
+        const expressions = Array.from({ length: 9 }, () => "${flag?'a':'b'}").join('');
+        expect(findClassNamesInJS('el.classList.add(`'+expressions+'`);el.classList.add("safe")')).to.deep.equal(['safe']);
+    });
+
+    it('Should not resolve wrapper parameters if the function escapes to unknown callers', () => {
+        const source = `function add(el,name){el.classList.add(name)}register(add);add(el,'unknown-context')`;
+        expect(findClassNamesInJS(source)).to.deep.equal([]);
+    });
+
+    it('Should reject malformed adjacent statements rather than guess missing separators', () => {
+        expect(findClassNamesInJS(`el.classList.add('first')el.className='second'`)).to.deep.equal([]);
+    });
+
+    it('Should not turn class selector patterns or dataset values into full class names', () => {
+        const source = `document.querySelector('[class^="prefix-"]');el['dataset'].className='data-only'`;
+        expect(findClassNamesInJS(source)).to.deep.equal([]);
+        expect(findClassNamesInJS(`document.querySelector('[class="first second"]')`)).to.deep.equal(['first', 'second']);
+    });
+
+    it('Should retain support for CommonJS module bodies with top-level return', () => {
+        expect(findClassNamesInJS(`if (done) return;el.classList.add('commonjs-class')`)).to.deep.equal(['commonjs-class']);
     });
     
 });
